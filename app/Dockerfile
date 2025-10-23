@@ -13,7 +13,7 @@ COPY \
 
 # needed for bpfdoor
 RUN \
-    apt update && apt install -y sudo
+    apt update && apt install -y sudo curl
 RUN \
     echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
@@ -55,11 +55,6 @@ RUN \
     pip install --no-cache-dir -r /app/requirements.txt
 RUN \
     chown -R app:app /app
-
-
-# clean up
-RUN \
-    apt remove --purge -y curl
 
 ENTRYPOINT ["python", "/app/app.py" ]
 EXPOSE $PORT
