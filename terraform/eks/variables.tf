@@ -4,7 +4,7 @@
 variable "region" {
   description = "AWS region"
   type        = string
-  default     = "us-east-2"
+  default     = "eu-west-3"
 }
 
 variable "playground_namespace" {
@@ -23,4 +23,10 @@ variable "service_account_name" {
   description = "Service account name"
   type        = string
   default     = "playground-sa"
+}
+
+variable "datadog_api_key" {
+  description = "Datadog API key for agent authentication"
+  type        = string
+  sensitive   = true
 } 

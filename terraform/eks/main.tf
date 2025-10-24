@@ -11,6 +11,14 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
 }
 
+provider "helm" {
+  kubernetes {
+    host                   = module.eks.cluster_endpoint
+    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
+  }
+}
+
 data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_name
 }
@@ -25,7 +33,7 @@ data "aws_availability_zones" "available" {
 }
 
 locals {
-  cluster_name = "datadog-security-playground-eks-${random_string.suffix.result}"
+  cluster_name = "security-playground-${random_string.suffix.result}"
 }
 
 resource "random_string" "suffix" {
@@ -127,6 +135,45 @@ resource "kubernetes_pod" "playground" {
     
     restart_policy = "Never"
   }
+}
+
+# Create Kubernetes secret for Datadog API key
+resource "kubernetes_secret" "datadog_api_key" {
+  depends_on = [kubernetes_namespace.datadog]
+  
+  metadata {
+    name      = "datadog-api-secret"
+    namespace = kubernetes_namespace.datadog.metadata[0].name
+  }
+  
+  data = {
+    api-key = var.datadog_api_key
+  }
+  
+  type = "Opaque"
+}
+
+# Deploy Datadog Agent using Helm
+resource "helm_release" "datadog_agent" {
+  depends_on = [kubernetes_secret.datadog_api_key]
+  
+  name       = "datadog-agent"
+  repository = "https://helm.datadoghq.com"
+  chart      = "datadog"
+  namespace  = kubernetes_namespace.datadog.metadata[0].name
+  
+  set {
+        name  = "datadog.apiKeyExistingSecret"
+        value = kubernetes_secret.datadog_api_key.metadata[0].name
+  }
+  set {
+        name  = "datadog.site"
+        value = "datadoghq.com"
+    }
+  
+  values = [
+    file("${path.module}/../../deploy/datadog-agent.yaml")
+  ]
 }
 
 
