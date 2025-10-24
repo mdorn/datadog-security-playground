@@ -176,6 +176,21 @@ resource "helm_release" "datadog_agent" {
   ]
 }
 
+# Deploy playground app using existing manifest
+resource "kubernetes_manifest" "playground_app" {
+  depends_on = [kubernetes_namespace.playground, helm_release.datadog_agent]
+  
+  manifest = merge(
+    yamldecode(file("${path.module}/../../deploy/app.yaml")),
+    {
+      metadata = {
+        namespace = kubernetes_namespace.playground.metadata[0].name
+        name = "playground-app"
+      }
+    }
+  )
+}
+
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
