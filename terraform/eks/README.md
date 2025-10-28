@@ -1,23 +1,76 @@
 # Terraform for EKS
 
-The Terraform code inside this repository provides a simple way to create an EKS cluster. 
+The Terraform code inside this repository provides a simple way to create an EKS cluster with Datadog monitoring and a security playground application.
 
-To start, ensure AWS credentials are configured or passed as environment variables, and simply issue: 
+## Prerequisites
+
+- AWS credentials configured or passed as environment variables
+- Terraform installed (>= 1.0)
+- Datadog API key
+
+## Deployment
+
+Due to Terraform provider initialization requirements, deployment must be done in **two stages**:
+
+### Stage 1: Create the EKS Cluster and VPC
 
 ```bash
 terraform init
+terraform apply -var="datadog_api_key=YOUR_API_KEY_HERE" \
+    -target=module.vpc \
+    -target=module.eks
+```
+
+This creates:
+- VPC with public and private subnets
+- EKS cluster with managed node groups
+- Required IAM roles and policies
+
+### Stage 2: Deploy Kubernetes Resources
+
+Once the cluster is created, deploy the Kubernetes resources:
+
+```bash
 terraform apply -var="datadog_api_key=YOUR_API_KEY_HERE"
 ```
 
-Once everything is set up, you can update your kubeconfig with
+This deploys:
+- Kubernetes namespaces (`playground` and `datadog`)
+- Service accounts and secrets
+- Datadog Agent via Helm
+- Playground application
 
-```bash 
+## Access the Cluster
+
+Update your kubeconfig to access the cluster:
+
+```bash
 aws eks --region $(terraform output -raw region) update-kubeconfig \
     --name $(terraform output -raw cluster_name)
 ```
 
-After this, there will be two available namespaces:
-- The `playground` namespace, containing the vulnerable app
-- The `datadog` namespace, containing the Datadog agent, deployed with Helm via Terraform
+## What Gets Deployed
 
-There might be cases in which the AWS tokens expires. Just re-run the `terraform apply` command in this case.
+### Namespaces
+- **`playground`**: Contains the vulnerable security playground application
+- **`datadog`**: Contains the Datadog Agent for monitoring and security
+
+### Resources
+- EKS cluster (v1.29) with 2 managed node groups
+- Datadog Agent deployed via Helm chart
+- Ubuntu test pod for experimentation
+- Pod Identity associations for AWS IAM integration
+
+## File Structure
+
+- `main.tf`: EKS cluster, VPC, and provider configurations
+- `k8s.tf`: Kubernetes resources (namespaces, deployments, etc.)
+- `variables.tf`: Input variables
+- `outputs.tf`: Output values
+- `terraform.tf`: Terraform and provider version constraints
+
+## Troubleshooting
+
+**AWS token expires**: Get fresh credentials.
+
+**Provider initialization errors**: Make sure to follow the two-stage deployment process. The Kubernetes provider needs the cluster to exist before it can initialize.
