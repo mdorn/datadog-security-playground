@@ -1,0 +1,67 @@
+# Developer Guide
+
+This guide is for developers who want to run the Datadog Security Playground locally using Minikube.
+
+## 🛠️ Prerequisites
+
+### Required Tools
+- **Helm Charts**: [Installation Guide](https://helm.sh/docs/intro/install/)
+- **Minikube**: [Installation Guide](https://minikube.sigs.k8s.io/docs/start)
+
+## Minikube Setup
+
+Virtual machine-based Minikube is mandatory for this simulation.
+
+**Important:** Use [minikube version 1.36](https://github.com/kubernetes/minikube/releases/tag/v1.36.0) or older. Newer versions come with a custom 6.6 kernel without BTF support, which is not compatible with datadog agent.
+
+**Configure Kubernetes Version:**
+```bash
+# Set Kubernetes version to 1.33.1
+minikube config set kubernetes-version v1.33.1
+```
+
+**Option 1 - QEMU Driver:**
+```bash
+minikube start --driver=qemu
+```
+
+**Option 2 - KVM2 Driver:**
+```bash
+minikube start --driver=kvm2
+```
+
+## 🐳 Building and Loading Docker Image
+
+Before deploying the PHP application, you need to build the Docker image and load it into Minikube:
+
+### Step 1: Build the Docker Image
+```bash
+# Build the PHP application image
+make build
+```
+
+### Step 2: Load Image into Minikube
+```bash
+# Load the image into Minikube's Docker daemon
+make load
+```
+
+## 🔨 Building Binaries
+
+Here's how to rebuild the simulation binaries:
+
+### Build All Assets
+```bash
+# Build all simulation binaries
+cd assets && make
+```
+
+### Build Individual Components
+```bash
+# Build BPFDoor simulator
+cd assets/ && make bpfdoor
+
+# Build malware simulator
+cd assets/ && make malware
+```
+
