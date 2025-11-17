@@ -14,46 +14,17 @@ A comprehensive educational security simulation environment designed to demonstr
 ## 🛠️ Prerequisites
 
 ### Required Tools
+- **Kubernetes cluster** (existing cluster or see infrastructure options below)
+- **kubectl**: [Installation Guide](https://kubernetes.io/docs/tasks/tools/)
 - **Helm Charts**: [Installation Guide](https://helm.sh/docs/intro/install/)
-- **Minikube** (optional): [Installation Guide](https://minikube.sigs.k8s.io/docs/start)
 
-### Minikube Setup (optional)
+### Infrastructure Options
 
-Virtual machine-based Minikube is mandatory for this simulation.
+You can deploy this playground on:
 
-**Important:** Use [minikube version 1.36](https://github.com/kubernetes/minikube/releases/tag/v1.36.0) or older. Newer versions come with a custom 6.6 kernel without BTF support, which is not compatible with datadog agent.
-
-**Configure Kubernetes Version:**
-```bash
-# Set Kubernetes version to 1.33.1
-minikube config set kubernetes-version v1.33.1
-```
-
-**Option 1 - QEMU Driver:**
-```bash
-minikube start --driver=qemu
-```
-
-**Option 2 - KVM2 Driver:**
-```bash
-minikube start --driver=kvm2
-```
-
-## 🐳 Building and Loading Docker Image
-
-Before deploying the PHP application, you need to build the Docker image and load it into Minikube:
-
-### Step 1: Build the Docker Image
-```bash
-# Build the PHP application image
-make build
-```
-
-### Step 2: Load Image into Minikube
-```bash
-# Load the image into Minikube's Docker daemon
-make load
-```
+1. **Your existing Kubernetes cluster** - Follow the deployment guide below
+2. **Amazon EKS using Terraform** - See [Terraform EKS Setup](#-terraform-eks-setup-optional) section
+3. **Local Minikube cluster** - For developers, see [DEVELOPER.md](DEVELOPER.md)
 
 ## 🚀 Deployment Guide
 
@@ -111,6 +82,59 @@ make load
    datadog-agent-rzxs2                            4/4     Running             0          4m18s
    playground-app-deployment-87b8d4b88-2hmzx             1/1     Running             0          1m30s
    ```
+
+## ☁️ Terraform EKS Setup (Optional)
+
+If you don't have an existing Kubernetes cluster, you can use Terraform to create an Amazon EKS cluster with the playground application and Datadog Agent pre-configured.
+
+### Prerequisites
+- AWS credentials configured or passed as environment variables
+- Terraform installed (>= 1.0)
+- Datadog API key
+
+### Deployment
+
+Due to Terraform provider initialization requirements, deployment must be done in **two stages**:
+
+#### Stage 1: Create the EKS Cluster and VPC
+
+```bash
+cd terraform/eks
+terraform init
+terraform apply -var="datadog_api_key=YOUR_API_KEY_HERE" \
+    -target=module.vpc \
+    -target=module.eks
+```
+
+This creates:
+- VPC with public and private subnets
+- EKS cluster with managed node groups
+- Required IAM roles and policies
+
+#### Stage 2: Deploy Kubernetes Resources
+
+Once the cluster is created, deploy the Kubernetes resources:
+
+```bash
+terraform apply -var="datadog_api_key=YOUR_API_KEY_HERE"
+```
+
+This deploys:
+- Kubernetes namespaces (`playground` and `datadog`)
+- Service accounts and secrets
+- Datadog Agent via Helm
+- Playground application
+
+### Access the Cluster
+
+Update your kubeconfig to access the cluster:
+
+```bash
+aws eks --region $(terraform output -raw region) update-kubeconfig \
+    --name $(terraform output -raw cluster_name)
+```
+
+For more details, see [terraform/eks/README.md](terraform/eks/README.md).
 
 ## 🎯 Available Attack Scenarios
 
@@ -195,21 +219,6 @@ After running any attack scenario:
 3. **Analyze Attack Timeline** to understand the attack progression
 4. **Examine Detection Rules** that triggered alerts
 
-## 🔨 Optional: Building Binaries
+## 🔧 Developer Resources
 
-Here's how to rebuild the simulation binaries:
-
-### Build All Assets
-```bash
-# Build all simulation binaries
-cd assets && make
-```
-
-### Build Individual Components
-```bash
-# Build BPFDoor simulator
-cd assets/ && make bpfdoor
-
-# Build malware simulator
-cd assets/ && make malware
-```
+For local development, building binaries, and contributing to this project, see [DEVELOPER.md](DEVELOPER.md).
