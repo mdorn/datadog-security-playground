@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: playground-app
-          image: docker.io/datadog/datadog-security-playground@sha256:083404d103e9af25c0c7eb7b9b1485d4f9d212bad560d927bb149eef21e8c9df
-          imagePullPolicy: IfNotPresent
+          image: docker.io/datadog/datadog-security-playground:latest
+          imagePullPolicy: Always
           env:
             - name: DD_SERVICE
               value: "playground-app"
