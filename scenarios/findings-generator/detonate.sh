@@ -258,6 +258,6 @@ echo "To view findings:"
 echo "  1. Navigate to Security > Workload Protection > Findings"
 echo "  2. Filter by Finding: 'Verify Essential Linux Binary Modified on Container'"
 echo "  3. Check findings for service: ${DD_SERVICE}"
-cho ""
+echo ""
 echo -e "${YELLOW}Note: It may take a few minutes for findings to appear in Datadog${NC}"
 
