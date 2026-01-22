@@ -13,7 +13,7 @@ COPY \
 
 # needed for bpfdoor
 RUN \
-    apt update && apt install -y sudo curl jq awscli
+    apt update && apt install -y sudo curl jq awscli dnsutils
 RUN \
     echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 

