@@ -61,7 +61,7 @@ def ssrf():
     url = request.args.get("url")
     logger.info(f"Received SSRF request from {request.remote_addr} with URL: {url}")
     try:
-        response = requests.get(url)
+        response = requests.get("http://{url}/safe")
         return response.text
     except Exception as e:
         logger.error(f"Error executing SSRF request: {str(e)}", exc_info=True)
