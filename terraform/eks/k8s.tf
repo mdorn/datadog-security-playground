@@ -117,10 +117,13 @@ resource "kubernetes_manifest" "playground_app" {
   manifest = merge(
     yamldecode(file("${path.module}/../../deploy/app.yaml")),
     {
-      metadata = {
-        namespace = kubernetes_namespace.playground.metadata[0].name
-        name = "playground-app"
-      }
+      metadata = merge(
+        yamldecode(file("${path.module}/../../deploy/app.yaml")).metadata,
+        {
+          namespace = kubernetes_namespace.playground.metadata[0].name
+          name = "playground-app"
+        }
+      )
     }
   )
 }
