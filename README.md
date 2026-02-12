@@ -155,6 +155,17 @@ aws eks --region $(terraform output -raw region) update-kubeconfig \
 
 For more details, see [terraform/eks/README.md](terraform/eks/README.md).
 
+### Cleanup
+
+To destroy the EKS cluster and all associated AWS resources:
+
+```bash
+cd terraform/eks
+terraform destroy -var="datadog_api_key=YOUR_API_KEY_HERE"
+```
+
+This removes the EKS cluster, VPC, IAM roles, and all Kubernetes resources deployed by Terraform.
+
 ## 🎯 Available Attack Scenarios
 
 Navigate to the `scenarios/` folder to explore available attack scenarios. Each scenario includes detailed documentation and step-by-step instructions.
