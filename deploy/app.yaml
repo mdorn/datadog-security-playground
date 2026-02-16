@@ -13,6 +13,11 @@ spec:
         app: playground-app
         admission.datadoghq.com/cws-instrumentation.enabled: "true"
     spec:
+      hostAliases:
+        - ip: "127.0.0.1" # prevent the resolution of mining pools domains
+          hostnames:
+            - "ethermine.org"
+            - "monerohash.com"
       containers:
         - name: playground-app
           image: docker.io/datadog/datadog-security-playground:latest
