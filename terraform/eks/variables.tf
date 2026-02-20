@@ -4,7 +4,7 @@
 variable "region" {
   description = "AWS region"
   type        = string
-  default     = "eu-west-3"
+  default     = "us-east-2"
 }
 
 variable "playground_namespace" {

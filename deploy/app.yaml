@@ -16,11 +16,17 @@ spec:
       containers:
         - name: playground-app
           image: docker.io/datadog/datadog-security-playground:latest
+          command: ["ddtrace-run"]
+          args: ["python", "/app/app.py"]
           imagePullPolicy: Always
           env:
             - name: DD_SERVICE
               value: "playground-app"
             - name: DD_APPSEC_ENABLED
+              value: "true"
+            - name: DD_IAST_ENABLED
+              value: "true"
+            - name: DD_APPSEC_SCA_ENABLED
               value: "true"
             - name: DD_AGENT_HOST
               valueFrom:
