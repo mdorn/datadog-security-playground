@@ -10,6 +10,12 @@ datadog:
       enabled: true
       targets:
         - name: "default-target"
+          namespaceSelector:
+            matchNames:
+              - playground
+          podSelector:
+            matchLabels:
+              app: playground-app
           ddTraceVersions:
             java: "1"
             python: "4"
@@ -49,6 +55,7 @@ datadog:
 clusterAgent:
   enabled: true
   admissionController:
+    mutateUnlabelled: true
     cwsInstrumentation:
       enabled: true
       mode: remote_copy
