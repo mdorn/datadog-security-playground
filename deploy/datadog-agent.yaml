@@ -45,10 +45,10 @@ datadog:
   asm:
     threats:
       enabled: true
-      sca:
-        enabled: true
-      iast:
-        enabled: true
+    sca:
+      enabled: true
+    iast:
+      enabled: true
 clusterAgent:
   enabled: true
   admissionController:
