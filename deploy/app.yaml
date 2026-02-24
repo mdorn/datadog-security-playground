@@ -17,7 +17,7 @@ spec:
         - name: playground-app
           image: docker.io/mdorn/datadog-security-playground:latest
           command: ["ddtrace-run"]
-          args: ["python", "/app/app.py"]
+          args: ["gunicorn", "-b", ":5000", "app:app"]
           imagePullPolicy: Always
           env:
             - name: DD_SERVICE
