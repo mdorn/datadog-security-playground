@@ -17,12 +17,16 @@ datadog:
             php: "1"
             dotnet: "3"
             ruby: "2"
+  logCollection:
+    enabled: true
+    containerCollectAll: true
   
   env:
     - name: DD_HOSTNAME
       value: playground
     - name: DD_ENV
-      value: "playground-env"
+      # value: "playground-env"
+      value: "dev"
     - name: DD_CLUSTER_NAME
       value: "playground-cluster"
     - name: DD_KUBELET_TLS_VERIFY
@@ -49,6 +53,7 @@ datadog:
       enabled: true
     iast:
       enabled: true
+
 clusterAgent:
   enabled: true
   admissionController:

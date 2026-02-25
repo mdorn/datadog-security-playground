@@ -6,3 +6,6 @@ terraform/eks/terraform.tfstate.lock.info
 terraform/eks/terraform.tfstate.lock.info
 
 *.pyc
+.vscode
+.env
+.venv
