@@ -1,6 +1,6 @@
 # Datadog Security Playground
 
-A comprehensive educational security simulation environment designed to demonstrate web application attack methodologies and showcase Datadog's Workload Protection capabilities. This playground provides hands-on experience with real-world attack scenarios in a controlled, safe environment.
+A comprehensive educational security simulation environment designed to demonstrate web application attack methodologies and showcase Datadog's Security capabilities. This playground provides hands-on experience with real-world attack scenarios in a controlled, safe environment.
 
 ## ⚠️ Important Disclaimer
 
@@ -24,7 +24,8 @@ You can deploy this playground on:
 
 1. **Your existing Kubernetes cluster** - Follow the deployment guide below
 2. **Amazon EKS using Terraform** - See [Terraform EKS Setup](#-terraform-eks-setup-optional) section
-3. **Local Minikube cluster** - For developers, see [DEVELOPER.md](DEVELOPER.md)
+3. **Local Lima VM** - See [LIMA.md](LIMA.md)
+4. **Local Minikube cluster** - For developers, see [DEVELOPER.md](DEVELOPER.md)
 
 ## 🚀 Deployment Guide
 
