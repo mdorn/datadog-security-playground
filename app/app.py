@@ -1,10 +1,8 @@
-import os
-import subprocess
+import json
 import logging
-import sqlite3
 import requests
-
-from datetime import datetime
+import sqlite3
+import subprocess
 
 from flask import Flask, request, send_from_directory, render_template
 
@@ -121,10 +119,16 @@ def lfi():
         raise
 
 
-@app.route("/login", methods=["GET"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     user_login = request.args.get("login", "")
     password = request.args.get("password", "")
+    if request.method == "GET":
+        data = dict(request.args)
+    elif request.method == "POST":
+        data = json.loads(request.get_data()) if request.get_data() else ""
+    user_login = data.get("login", "")
+    password = data.get("password", "")
     logger.info(f"Received login request from {request.remote_addr} for user: {user_login}")
 
     if not user_login or not password:
