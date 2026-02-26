@@ -1,11 +1,9 @@
 import json
 import logging
-import os
 import requests
 import sqlite3
 import subprocess
 
-from datetime import datetime
 
 from flask import Flask, request, send_from_directory, render_template
 
@@ -14,7 +12,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        # logging.FileHandler('/var/log/app.log'),
+        logging.FileHandler('/var/log/app.log'),
         logging.StreamHandler()
     ]
 )
