@@ -25,8 +25,7 @@ datadog:
     - name: DD_HOSTNAME
       value: playground
     - name: DD_ENV
-      # value: "playground-env"
-      value: "dev"
+      value: "playground-env"
     - name: DD_CLUSTER_NAME
       value: "playground-cluster"
     - name: DD_KUBELET_TLS_VERIFY
