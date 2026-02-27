@@ -23,16 +23,16 @@ This folder contains minimal Datadog APM-only stacks (no AppSec) built with Dock
 
 3. Choose a configuration:
     - Plain apps:
-      - Python (FastAPI): [docker-compose.apm-only.python-fastapi.yml](./docker-compose.apm-only.python-fastapi.yml) | [instructions](#api-only-pythonfastapi)
-      - Go (Gin): [docker-compose.apm-only.go-gin.yml](./docker-compose.apm-only.go-gin.yml) | [instructions](#api-only-gogin)
+      - Python (FastAPI): [docker-compose.apm-only.python-fastapi.yml](./onboarding/docker-compose.apm-only.python-fastapi.yml) | [instructions](#api-only-pythonfastapi)
+      - Go (Gin): [docker-compose.apm-only.go-gin.yml](./onboarding/docker-compose.apm-only.go-gin.yml) | [instructions](#api-only-gogin)
     - Proxies:
-      - Nginx + go app: [docker-compose.apm-only.nginx-go-gin.yml](./docker-compose.apm-only.nginx-go-gin.yml) | [instructions](#nginx--gogin)
-      - Envoy + go app: [docker-compose.apm-only.envoy-go-gin.yml](./docker-compose.apm-only.envoy-go-gin.yml) | [instructions](#envoy--gogin)
-      - HAProxy + go app: [docker-compose.apm-only.haproxy-go-gin.yml](./docker-compose.apm-only.haproxy-go-gin.yml) | [instructions](#haproxy--gogin)
+      - Nginx + go app: [docker-compose.apm-only.nginx-go-gin.yml](./onboarding/docker-compose.apm-only.nginx-go-gin.yml) | [instructions](#nginx--gogin)
+      - Envoy + go app: [docker-compose.apm-only.envoy-go-gin.yml](./onboarding/docker-compose.apm-only.envoy-go-gin.yml) | [instructions](#envoy--gogin)
+      - HAProxy + go app: [docker-compose.apm-only.haproxy-go-gin.yml](./onboarding/docker-compose.apm-only.haproxy-go-gin.yml) | [instructions](#haproxy--gogin)
 
 4. Start the stack:
      ```bash
-     docker compose up -f <docker compose file> up --build
+     docker compose -f <docker compose file> up --build
      ```
 
 5. In another terminal, start the traffic generator:
@@ -59,7 +59,7 @@ lima
 
 # /Users is mounted in the VM so you have access to the repo
 # Run agent installation / docker commands in the VM
-cd /Users/<my_macos_username>/datadog-security-playground/appsec/onboarding-playground
+cd /Users/<my_macos_username>/datadog-security-playground/appsec/onboarding
 
 # Follow quick start docs
 ```
