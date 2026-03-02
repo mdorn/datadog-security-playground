@@ -11,9 +11,14 @@ COPY \
     scenarios /scenarios
 
 
-# needed for bpfdoor
-RUN \
-    apt update && apt install -y sudo curl jq awscli dnsutils
+# sudo:     privilege escalation in bpfdoor and findings-generator
+# curl:     download payloads and IMDS access in rce-malware and bpfdoor
+# jq:       parse IMDS JSON credentials in rce-malware/cloud-access
+# awscli:   AWS API calls (ec2 run-instances) in rce-malware/cloud-access
+# dnsutils: dig to mining pools in rce-malware/payload
+# procps:   pkill for cleanup in rce-malware
+RUN apt update && apt install -y \
+    sudo curl jq awscli dnsutils procps
 RUN \
     echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
