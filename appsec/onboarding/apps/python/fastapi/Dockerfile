@@ -12,15 +12,14 @@ ENV UV_COMPILE_BYTECODE=1
 ENV UV_NO_EDITABLE=1
 ENV UV_PROJECT_ENVIRONMENT=/usr/local
 
+RUN pip install uv==0.11.1
 
 COPY pyproject.toml uv.lock ./
-RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
-    --mount=type=cache,target=/root/.cache/uv \
+RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --no-install-workspace
 
 COPY src/ ./src/
-RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
-    --mount=type=cache,target=/root/.cache/uv \
+RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync
 
 
