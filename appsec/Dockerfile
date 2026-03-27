@@ -8,12 +8,13 @@ ENV UV_COMPILE_BYTECODE=1
 ENV UV_NO_EDITABLE=1
 ENV UV_PROJECT_ENVIRONMENT=/usr/local
 
+RUN pip install uv==0.11.1
+
 WORKDIR /app
 
 COPY pyproject.toml uv.lock README.md ./
 COPY src/ ./src/
-RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
-    --mount=type=cache,target=/root/.cache/uv \
+RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync
 
 ENV DOGFOODING_WEB_HOST=0.0.0.0

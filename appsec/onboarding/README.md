@@ -23,12 +23,12 @@ This folder contains minimal Datadog APM-only stacks (no AppSec) built with Dock
 
 3. Choose a configuration:
     - Plain apps:
-      - Python (FastAPI): [docker-compose.apm-only.python-fastapi.yml](./onboarding/docker-compose.apm-only.python-fastapi.yml) | [instructions](#api-only-pythonfastapi)
-      - Go (Gin): [docker-compose.apm-only.go-gin.yml](./onboarding/docker-compose.apm-only.go-gin.yml) | [instructions](#api-only-gogin)
+      - Python (FastAPI): [docker-compose.apm-only.python-fastapi.yml](./setups/docker-compose.apm-only.python-fastapi.yml)
+      - Go (Gin): [docker-compose.apm-only.go-gin.yml](./setups/docker-compose.apm-only.go-gin.yml)
     - Proxies:
-      - Nginx + go app: [docker-compose.apm-only.nginx-go-gin.yml](./onboarding/docker-compose.apm-only.nginx-go-gin.yml) | [instructions](#nginx--gogin)
-      - Envoy + go app: [docker-compose.apm-only.envoy-go-gin.yml](./onboarding/docker-compose.apm-only.envoy-go-gin.yml) | [instructions](#envoy--gogin)
-      - HAProxy + go app: [docker-compose.apm-only.haproxy-go-gin.yml](./onboarding/docker-compose.apm-only.haproxy-go-gin.yml) | [instructions](#haproxy--gogin)
+      - Nginx + go app: [docker-compose.apm-only.nginx-go-gin.yml](./setups/docker-compose.apm-only.nginx-go-gin.yml)
+      - Envoy + go app: [docker-compose.apm-only.envoy-go-gin.yml](./setups/docker-compose.apm-only.envoy-go-gin.yml)
+      - HAProxy + go app: [docker-compose.apm-only.haproxy-go-gin.yml](./setups/docker-compose.apm-only.haproxy-go-gin.yml)
 
 4. Start the stack:
      ```bash
