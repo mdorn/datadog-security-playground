@@ -2,11 +2,6 @@
 
 set -e
 
-# Back-compat: DD_API_SITE was the old name for DD_SITE
-if [ -z "$DD_SITE" ] && [ -n "$DD_API_SITE" ]; then
-    DD_SITE="$DD_API_SITE"
-fi
-
 # Check if required environment variables are set
 if [ -z "$DD_API_KEY" ]; then
     echo "Error: DD_API_KEY environment variable is not set"
