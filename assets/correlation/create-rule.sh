@@ -2,6 +2,11 @@
 
 set -e
 
+# Back-compat: DD_API_SITE was the old name for DD_SITE
+if [ -z "$DD_SITE" ] && [ -n "$DD_API_SITE" ]; then
+    DD_SITE="$DD_API_SITE"
+fi
+
 # Check if required environment variables are set
 if [ -z "$DD_API_KEY" ]; then
     echo "Error: DD_API_KEY environment variable is not set"
@@ -13,8 +18,8 @@ if [ -z "$DD_APP_KEY" ]; then
     exit 1
 fi
 
-if [ -z "$DD_API_SITE" ]; then
-    echo "Error: DD_API_SITE environment variable is not set"
+if [ -z "$DD_SITE" ]; then
+    echo "Error: DD_SITE environment variable is not set"
     exit 1
 fi
 
@@ -31,7 +36,7 @@ fi
 echo "Creating detection rule from $RULE_FILE..."
 
 # Make the API request
-response=$(curl -X POST "https://$DD_API_SITE/api/v2/security_monitoring/rules" \
+response=$(curl -X POST "https://$DD_SITE/api/v2/security_monitoring/rules" \
     -H "DD-API-KEY: $DD_API_KEY" \
     -H "DD-APPLICATION-KEY: $DD_APP_KEY" \
     -H "Content-Type: application/json" \
