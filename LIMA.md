@@ -30,19 +30,29 @@ export KUBECONFIG=$(limactl list k8s --format 'unix://{{.Dir}}/copied-from-guest
 
 ### Step 3: Deploy Datadog Agent
 
-1. **Add the Datadog Helm repository and create the API key secret:**
+1. **Export your Datadog credentials** (change `DD_SITE` if you're not on US1 — see [Datadog site documentation](https://docs.datadoghq.com/getting_started/site/#access-the-datadog-site) for valid values):
+   ```bash
+   export DD_SITE=datadoghq.com
+   export DD_API_KEY=<your API key>              # https://app.datadoghq.com/organization-settings/api-keys
+   export DD_APP_KEY=<your application key>      # only needed for scenario 1 (rce-malware); requires security_monitoring_rules_write scope
+   ```
+
+2. **Add the Datadog Helm repository and create the API key secret:**
    ```bash
    helm repo add datadog https://helm.datadoghq.com
    helm repo update
-   kubectl create secret generic datadog-api-secret --from-literal api-key="<YOUR_DATADOG_API_KEY>"
+   kubectl create secret generic datadog-api-secret --from-literal api-key="$DD_API_KEY"
    ```
 
-2. **Install the Datadog Agent with the playground configuration:**
+3. **Install the Datadog Agent with the playground configuration:**
    ```bash
-   helm install datadog-agent -f deploy/datadog-agent.yaml datadog/datadog
+   helm install datadog-agent \
+     --set datadog.site=$DD_SITE \
+     -f deploy/datadog-agent.yaml \
+     datadog/datadog
    ```
 
-3. **Wait until the agent pods are running before proceeding:**
+4. **Wait until the agent pods are running before proceeding:**
    ```bash
    kubectl get pods -w -A
    ```
@@ -69,3 +79,27 @@ kubectl port-forward -n playground deployments/playground-app 5000:5000
 ```
 
 The playground is now accessible at [http://localhost:5000](http://localhost:5000).
+
+## 🐳 Building and Loading Docker Image (Optional)
+
+This step is optional and only needed if you want to deploy a locally built version of the playground application instead of the published image. If so, you need to build the Docker image and load it into the Lima VM before deploying the app.
+
+### Step 1: Build the Docker Image
+
+```bash
+# add multiarch support
+docker buildx create --use
+```
+
+```bash
+# Build the Python application image
+make build
+```
+
+### Step 2: Load Image into Lima
+
+The Lima Kubernetes template uses `containerd` as the container runtime. Save the image from your local Docker daemon and import it into the VM's `k8s.io` containerd namespace:
+
+```bash
+docker save datadog/datadog-security-playground:latest | limactl shell k8s sudo ctr --namespace=k8s.io images import -
+```
